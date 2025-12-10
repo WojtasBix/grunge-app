@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grunge Bands – Albumy</title>
+<style>
+    body {
+        background: #1b1b1b;
+        color: #f0f0f0;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #ffcc00;
+        font-size: 32px;
+        letter-spacing: 2px;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .layout {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .band-list {
+        flex: 1 1 250px;
+        max-width: 260px;
+    }
+
+    .band-item {
+        padding: 10px 12px;
+        margin: 6px 0;
+        background: #2b2b2b;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-weight: bold;
+    }
+
+    .band-item:hover {
+        background: #3d3d3d;
+    }
+
+    .band-item.active {
+        background: #55501a;
+    }
+
+    .albums {
+        flex: 2 1 400px;
+        background: #262626;
+        border-radius: 8px;
+        padding: 20px;
+        display: none;
+    }
+
+    .albums h2 {
+        margin-top: 0;
+        color: #ffcc00;
+        margin-bottom: 15px;
+    }
+
+    .albums-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .album-card {
+        width: 180px;
+        background: #1f1f1f;
+        border-radius: 8px;
+        padding: 8px;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .album-card img {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
+        margin: 0 auto 6px;
+    }
+
+    .album-card p {
+        margin: 0;
+    }
+
+    @media (max-width: 800px) {
+        .layout {
+            flex-direction: column;
+        }
+        .band-list {
+            max-width: 100%;
+        }
+        .album-card {
+            width: calc(50% - 8px);
+        }
+        .album-card img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .album-card {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>GRUNGE BANDS – ALBUMY</h1>
+
+    <div class="layout">
+        <div class="band-list"></div>
+
+        <div class="albums">
+            <h2></h2>
+            <div class="albums-grid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dane: zespoły + albumy (studyjne)
+const grungeBands = {
+    "Nirvana": [
+        "Bleach (1989)",
+        "Nevermind (1991)",
+        "In Utero (1993)"
+    ],
+    "Pearl Jam": [
+        "Ten (1991)",
+        "Vs. (1993)",
+        "Vitalogy (1994)",
+        "No Code (1996)",
+        "Yield (1998)",
+        "Binaural (2000)",
+        "Riot Act (2002)",
+        "Pearl Jam (2006)",
+        "Backspacer (2009)",
+        "Lightning Bolt (2013)",
+        "Gigaton (2020)",
+        "Dark Matter (2024)"
+    ],
+    "Soundgarden": [
+        "Ultramega OK (1988)",
+        "Louder Than Love (1989)",
+        "Badmotorfinger (1991)",
+        "Superunknown (1994)",
+        "Down on the Upside (1996)",
+        "King Animal (2012)"
+    ],
+    "Alice in Chains": [
+        "Facelift (1990)",
+        "Dirt (1992)",
+        "Alice in Chains (1995)",
+        "Black Gives Way to Blue (2009)",
+        "The Devil Put Dinosaurs Here (2013)",
+        "Rainier Fog (2018)"
+    ],
+    "Stone Temple Pilots": [
+        "Core (1992)",
+        "Purple (1994)",
+        "Tiny Music... (1996)",
+        "No. 4 (1999)",
+        "Shangri-La Dee Da (2001)",
+        "Stone Temple Pilots (2010)",
+        "Stone Temple Pilots (2018)"
+    ],
+    "Mudhoney": [
+        "Mudhoney (1989)",
+        "Every Good Boy Deserves Fudge (1991)",
+        "My Brother the Cow (1995)",
+        "Tomorrow Hit Today (1998)",
+        "Since We've Become Translucent (2002)",
+        "Under a Billion Suns (2006)",
+        "The Lucky Ones (2008)",
+        "Vanishing Point (2013)",
+        "Digital Garbage (2018)",
+        "Plastic Eternity (2023)"
+    ],
+    "Mother Love Bone": [
+        "Apple (1990)"
+    ],
+    "Temple of the Dog": [
+        "Temple of the Dog (1991)"
+    ]
+};
+
+const bandListDiv = document.querySelector(".band-list");
+const albumsSection = document.querySelector(".albums");
+const albumsTitle = albumsSection.querySelector("h2");
+const albumsGrid = albumsSection.querySelector(".albums-grid");
+
+// Tworzenie listy zespołów
+function loadBands() {
+    Object.keys(grungeBands).forEach(band => {
+        const div = document.createElement("div");
+        div.className = "band-item";
+        div.textContent = band;
+        div.onclick = () => showAlbums(band, div);
+        bandListDiv.appendChild(div);
+    });
+}
+
+// Pokazanie albumów danego zespołu
+function showAlbums(band, clickedElement) {
+    // podświetlenie aktywnego
+    document.querySelectorAll(".band-item").forEach(el => el.classList.remove("active"));
+    clickedElement.classList.add("active");
+
+    albumsTitle.textContent = band;
+    albumsGrid.innerHTML = "";
+
+    const albums = grungeBands[band];
+
+    albums.forEach(album => {
+        const card = document.createElement("div");
+        card.className = "album-card";
+
+        const img = document.createElement("img");
+        const textForImg = encodeURIComponent(album);
+        img.src = `https://via.placeholder.com/180x180?text=${textForImg}`;
+        img.alt = album;
+
+        const p = document.createElement("p");
+        p.textContent = album;
+
+        card.appendChild(img);
+        card.appendChild(p);
+        albumsGrid.appendChild(card);
+    });
+
+    albumsSection.style.display = "block";
+}
+
+loadBands();
+</script>
+</body>
+</html>
