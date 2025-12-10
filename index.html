@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grunge Bands</title>
+<style>
+ body { background:#1b1b1b; color:#f0f0f0; font-family:Arial; padding:20px; }
+ h1 { text-align:center; color:#ffcc00; }
+ .band-list div { background:#2b2b2b; margin:6px 0; padding:10px; cursor:pointer; border-radius:6px; }
+ .band-list div:hover { background:#3d3d3d; }
+ .albums { display:none; margin-top:20px; padding:20px; background:#262626; border-radius:8px; }
+ img { width:180px; border-radius:8px; margin:8px 0; }
+</style>
+</head>
+<body>
+<h1>GRUNGE BANDS</h1>
+<div class="band-list"></div>
+<div class="albums">
+    <h2></h2>
+    <div class="covers"></div>
+</div>
+
+<script>
+const data = {
+ "Nirvana": {
+   albums: ["Bleach (1989)", "Nevermind (1991)", "In Utero (1993)"],
+   covers: [
+     "https://upload.wikimedia.org/wikipedia/en/6/68/Nirvana-Bleach.jpg",
+     "https://upload.wikimedia.org/wikipedia/en/b/b7/NirvanaNevermindalbumcover.jpg",
+     "https://upload.wikimedia.org/wikipedia/en/3/3d/Inutero.jpeg"
+   ]
+ },
+ "Pearl Jam": {
+   albums: ["Ten (1991)"],
+   covers: ["https://upload.wikimedia.org/wikipedia/en/2/2d/PearlJam-Ten2.jpg"]
+ }
+};
+
+const bandList = document.querySelector(".band-list");
+const albumsBox = document.querySelector(".albums");
+const titleBox = albumsBox.querySelector("h2");
+const coversBox = albumsBox.querySelector(".covers");
+
+for (let band in data){
+  const div = document.createElement("div");
+  div.textContent = band;
+  div.onclick = () => showBand(band);
+  bandList.appendChild(div);
+}
+
+function showBand(band){
+  titleBox.textContent = band;
+  coversBox.innerHTML = "";
+
+  data[band].covers.forEach((url,i)=>{
+     const img = document.createElement("img");
+     img.src = url;
+     img.alt = data[band].albums[i];
+     coversBox.appendChild(img);
+  });
+
+  albumsBox.style.display = "block";
+}
+</script>
+</body>
+</html>
